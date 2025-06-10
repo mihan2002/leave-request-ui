@@ -1,54 +1,73 @@
-# React + TypeScript + Vite
+# 📝 Leave Request Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a full-stack **Leave Request Management** system built with a **React (Vite)** frontend and a **Spring Boot** backend. The backend uses **PostgreSQL** for data storage and implements **JWT-based authentication and authorization**.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🔧 Tech Stack
 
-## Expanding the ESLint configuration
+### Frontend
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- React (Vite)
+- React Router
+- Axios
+- RxJS
+- React Matirial UI
+- Tailwind CSS
+- JWT Authentication
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+### Backend
+
+- Spring Boot
+- Spring Security
+- PostgreSQL
+- JPA (Hibernate)
+- JWT Token Authentication
+
+---
+
+## 📁 Project Structure
+
+### Frontend
+
+Located inside the `/leave-request-ui` folder:
+
+The application includes
+
+- `Login`, `Signup`, `LeaveForm`, and `LeaveList` components.
+- HTTP interceptor for JWT authentication.
+- RxJS Subjects for cross-component communication.
+
+---
+
+## 🚀 Getting Started
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/mihan2002/leave-request-ui.git
+cd leave-request-ui
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2. Frontend Setup
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Create a .env file in the root of the frontend folder (leave-request-ui):
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+add this line to the .env file and save.
+
+```bash
+  VITE_APP_API_BASE=http://localhost:8080/
+```
+
+### 3. Run the Frontend
+
+```bash
+  npm install
+  npm run dev
+```
+
+### 4.Backend setup(Optional)
+-if you didnt setup the backend use this link and follow the guide 
+```bash
+  https://github.com/mihan2002/leave-request-api.git
 ```
