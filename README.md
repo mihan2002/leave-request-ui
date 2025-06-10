@@ -30,13 +30,13 @@ The application includes
 
 ## 🚀 Getting Started
 
-### 1. Clone the Repository
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/mihan2002/leave-request-ui.git
 ```
 
-### 2. Frontend Setup
+### 2. Configure the enviroment
 
 Change the directory to `leave-request-ui`.
 
@@ -46,13 +46,13 @@ Change the directory to `leave-request-ui`.
 
 Create a .env file in the root of the frontend folder (leave-request-ui):
 
-add this line to the .env file and save.
+Add this line to the .env file and save.
 
 ```bash
   VITE_APP_API_BASE=http://localhost:8080/
 ```
 
-### 3. Run the Frontend
+### 3. Run the frontend
 
 ```bash
   npm install
