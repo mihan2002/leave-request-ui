@@ -54,6 +54,8 @@ Add this line to the .env file and save.
 
 ### 3. Run the frontend
 
+Open a command window and change directory to the `leave-request-ui` folder and run the below commands.
+
 ```bash
   npm install
   npm run dev
