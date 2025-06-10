@@ -2,7 +2,7 @@
 
 This is a full-stack **Leave Request Management** system built with a **React (Vite)** frontend and a **Spring Boot** backend. The backend uses **PostgreSQL** for data storage and implements **JWT-based authentication and authorization**.
 
-This document contains only the fontend setup
+This document contains only the fontend setup.
 
 ---
 
@@ -38,10 +38,15 @@ The application includes
 
 ```bash
 git clone https://github.com/mihan2002/leave-request-ui.git
-cd leave-request-ui
 ```
 
 ### 2. Frontend Setup
+
+Change the directory to `leave-request-ui`.
+
+```bash
+  cd leave-request-ui
+```
 
 Create a .env file in the root of the frontend folder (leave-request-ui):
 
@@ -59,7 +64,7 @@ add this line to the .env file and save.
 ```
 
 ### 4.Backend setup(Optional)
--if you didnt setup the backend use this link and follow the guide 
+ if you haven't setup the frontend application, use the bellow link to setup the backend application.
 ```bash
   https://github.com/mihan2002/leave-request-api.git
 ```
