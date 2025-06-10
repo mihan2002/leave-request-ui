@@ -63,7 +63,7 @@ add this line to the .env file and save.
   npm run dev
 ```
 
-### 4.Backend setup(Optional)
+### 4. Backend setup (Optional)
  if you haven't setup the frontend application, use the bellow link to setup the backend application.
 ```bash
   https://github.com/mihan2002/leave-request-api.git
