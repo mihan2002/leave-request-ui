@@ -64,7 +64,7 @@ add this line to the .env file and save.
 ```
 
 ### 4. Backend setup (Optional)
- if you haven't setup the frontend application, use the bellow link to setup the backend application.
+ if you haven't setup the frontend application, please use the below link to setup the backend application.
 ```bash
   https://github.com/mihan2002/leave-request-api.git
 ```
