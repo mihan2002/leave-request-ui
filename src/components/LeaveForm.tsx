@@ -10,6 +10,7 @@ import {
   InputLabel,
   Alert,
   Paper,
+  FormHelperText,
 } from "@mui/material";
 import { createLeave, updateLeave } from "../services/leaveService";
 import { leaveBus } from "../utils/rxBus";
@@ -42,6 +43,11 @@ const LeaveForm: React.FC<Props> = ({ editingLeave }) => {
   const [reason, setReason] = useState("");
   const [error, setError] = useState("");
 
+  const [typeError, setTypeError] = useState(false);
+  const [startDateError, setStartDateError] = useState(false);
+  const [endDateError, setEndDateError] = useState(false);
+  const [reasonError, setReasonError] = useState(false);
+
   useEffect(() => {
     if (editingLeave) {
       setType(editingLeave.type);
@@ -51,12 +57,38 @@ const LeaveForm: React.FC<Props> = ({ editingLeave }) => {
     }
   }, [editingLeave]);
 
+  const validateFields = () => {
+    let valid = true;
+    setTypeError(false);
+    setStartDateError(false);
+    setEndDateError(false);
+    setReasonError(false);
+
+    if (!type) {
+      setTypeError(true);
+      valid = false;
+    }
+    if (!startDate) {
+      setStartDateError(true);
+      valid = false;
+    }
+    if (!endDate) {
+      setEndDateError(true);
+      valid = false;
+    }
+    if (!reason.trim()) {
+      setReasonError(true);
+      valid = false;
+    }
+    return valid;
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
 
-    if (!type || !startDate || !endDate || !reason) {
-      setError("All fields are required.");
+    if (!validateFields()) {
+      setError("Please fill in all required fields.");
       return;
     }
 
@@ -71,7 +103,6 @@ const LeaveForm: React.FC<Props> = ({ editingLeave }) => {
       } else {
         await createLeave({ type, startDate, endDate, reason });
       }
-
       leaveBus.next("refresh-leave-list");
     } catch (err) {
       setError("Failed to submit leave request.");
@@ -91,13 +122,15 @@ const LeaveForm: React.FC<Props> = ({ editingLeave }) => {
       )}
 
       <Box component="form" onSubmit={handleSubmit} noValidate>
-        <FormControl fullWidth margin="normal">
-          <InputLabel id="leave-type-label">Leave Type</InputLabel>
+        <FormControl fullWidth margin="normal" error={typeError}>
+          <InputLabel id="leave-type-label" required>
+            Leave Type
+          </InputLabel>
           <Select
             labelId="leave-type-label"
             id="type"
             value={type}
-            label="Leave Type"
+            label="Leave Type *"
             onChange={(e) => setType(e.target.value)}
           >
             {leaveTypes.map((lt) => (
@@ -106,19 +139,22 @@ const LeaveForm: React.FC<Props> = ({ editingLeave }) => {
               </MenuItem>
             ))}
           </Select>
+          {typeError && <FormHelperText>Leave type is required</FormHelperText>}
         </FormControl>
 
         <TextField
           label="Start Date"
           type="date"
+          required
           fullWidth
           margin="normal"
-          InputLabelProps={{ shrink: true }}
+          InputLabelProps={{ shrink: true, required: true }}
           value={startDate}
+          error={startDateError}
+          helperText={startDateError ? "Start date is required" : ""}
           onChange={(e) => {
             const selectedDate = e.target.value;
             setStartDate(selectedDate);
-
             if (endDate && selectedDate > endDate) {
               setEndDate("");
             }
@@ -128,23 +164,29 @@ const LeaveForm: React.FC<Props> = ({ editingLeave }) => {
         <TextField
           label="End Date"
           type="date"
+          required
           fullWidth
           margin="normal"
-          InputLabelProps={{ shrink: true }}
+          InputLabelProps={{ shrink: true, required: true }}
           value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
+          error={endDateError}
+          helperText={endDateError ? "End date is required" : ""}
           inputProps={{
             min: startDate,
           }}
+          onChange={(e) => setEndDate(e.target.value)}
         />
 
         <TextField
           label="Reason"
           multiline
           rows={4}
+          required
           fullWidth
           margin="normal"
           value={reason}
+          error={reasonError}
+          helperText={reasonError ? "Reason is required" : ""}
           onChange={(e) => setReason(e.target.value)}
         />
 

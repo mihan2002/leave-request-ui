@@ -53,61 +53,70 @@ export default function Login() {
   };
 
   return (
-    <Container maxWidth="sm">
-      <Paper elevation={3} sx={{ p: 4, mt: 8 }}>
-        <Typography variant="h4" align="center" gutterBottom>
-          Login
-        </Typography>
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        minHeight: "80vh",
+      }}
+    >
+      <Container maxWidth="sm">
+        <Paper elevation={3} sx={{ p: 4, mt: 8 }}>
+          <Typography variant="h4" align="center" gutterBottom>
+            Leave Request Login
+          </Typography>
 
-        {error && (
-          <Alert severity="error" sx={{ mb: 2 }}>
-            {error}
-          </Alert>
-        )}
+          {error && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {error}
+            </Alert>
+          )}
 
-        <Box component="form" onSubmit={handleSubmit} noValidate>
-          <TextField
-            label="Username"
-            fullWidth
-            margin="normal"
-            required
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            error={usernameError}
-            helperText={usernameError ? "Username is required" : ""}
-          />
+          <Box component="form" onSubmit={handleSubmit} noValidate>
+            <TextField
+              label="Username"
+              fullWidth
+              margin="normal"
+              required
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              error={usernameError}
+              helperText={usernameError ? "Username is required" : ""}
+            />
 
-          <TextField
-            label="Password"
-            type="password"
-            fullWidth
-            margin="normal"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            error={passwordError}
-            helperText={passwordError ? "Password is required" : ""}
-          />
+            <TextField
+              label="Password"
+              type="password"
+              fullWidth
+              margin="normal"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              error={passwordError}
+              helperText={passwordError ? "Password is required" : ""}
+            />
 
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            fullWidth
-            disabled={loading}
-            sx={{ mt: 2 }}
-          >
-            {loading ? <CircularProgress size={24} color="inherit" /> : "Login"}
-          </Button>
-        </Box>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              fullWidth
+              disabled={loading}
+              sx={{ mt: 2 }}
+            >
+              {loading ? <CircularProgress size={24} color="inherit" /> : "Login"}
+            </Button>
+          </Box>
 
-        <Typography variant="body2" align="center" sx={{ mt: 2 }}>
-          Don&apos;t have an account?{" "}
-          <Link component={RouterLink} to="/signup" underline="hover">
-            Register
-          </Link>
-        </Typography>
-      </Paper>
-    </Container>
+          <Typography variant="body2" align="center" sx={{ mt: 2 }}>
+            Don&apos;t have an account?{" "}
+            <Link component={RouterLink} to="/signup" underline="hover">
+              Register
+            </Link>
+          </Typography>
+        </Paper>
+      </Container>
+    </Box>
   );
 }

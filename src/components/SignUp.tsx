@@ -16,10 +16,12 @@ import { signup } from "../services/authService";
 export default function SignUp() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [usernameError, setUsernameError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
+  const [confirmPasswordError, setConfirmPasswordError] = useState(false);
 
   const navigate = useNavigate();
 
@@ -35,6 +37,10 @@ export default function SignUp() {
     if (!username || !password) {
       if (!username) setUsernameError(true);
       if (!password) setPasswordError(true);
+      return;
+    }
+    if (confirmPassword !== password) {
+      setConfirmPasswordError(true);
       return;
     }
 
@@ -88,6 +94,18 @@ export default function SignUp() {
             helperText={passwordError ? "Password is required" : ""}
           />
 
+          <TextField
+            label="Confirm Password"
+            type="password"
+            fullWidth
+            margin="normal"
+            required
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            error={confirmPasswordError}
+            helperText={confirmPasswordError ? "Passwords do not match" : ""}
+          />
+
           <Button
             type="submit"
             variant="contained"
@@ -96,7 +114,11 @@ export default function SignUp() {
             disabled={loading}
             sx={{ mt: 2 }}
           >
-            {loading ? <CircularProgress size={24} color="inherit" /> : "Sign Up"}
+            {loading ? (
+              <CircularProgress size={24} color="inherit" />
+            ) : (
+              "Sign Up"
+            )}
           </Button>
         </Box>
 
