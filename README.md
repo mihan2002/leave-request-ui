@@ -16,16 +16,6 @@ This is a full-stack **Leave Request Management** system built with a **React (V
 - Tailwind CSS
 - JWT Authentication
 
-### Backend
-
-- Spring Boot
-- Spring Security
-- PostgreSQL
-- JPA (Hibernate)
-- JWT Token Authentication
-
----
-
 ## 📁 Project Structure
 
 ### Frontend
