@@ -83,7 +83,9 @@ export default function LeaveList() {
   };
 
   const handleDelete = async (id: number) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this leave request?");
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this leave request?"
+    );
     if (!confirmDelete) return;
 
     try {
@@ -106,7 +108,12 @@ export default function LeaveList() {
           borderRadius: 2,
         }}
       >
-        <Stack direction="row" justifyContent="space-between" alignItems="center" mb={3}>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          mb={3}
+        >
           <Typography variant="h4" fontWeight="bold">
             Leave Requests
           </Typography>
@@ -144,7 +151,11 @@ export default function LeaveList() {
                     <TableCell>{leave.endDate}</TableCell>
                     <TableCell>{leave.reason}</TableCell>
                     <TableCell align="center">
-                      <Stack direction="row" spacing={1} justifyContent="center">
+                      <Stack
+                        direction="row"
+                        spacing={1}
+                        justifyContent="center"
+                      >
                         <Button
                           variant="contained"
                           color="warning"
@@ -170,8 +181,12 @@ export default function LeaveList() {
           </TableContainer>
         )}
 
-        <Dialog open={showForm} onClose={() => setShowForm(false)} fullWidth maxWidth="sm">
-          <DialogTitle>{editingLeave ? "Update Leave" : "Request Leave"}</DialogTitle>
+        <Dialog
+          open={showForm}
+          onClose={() => setShowForm(false)}
+          fullWidth
+          maxWidth="sm"
+        >
           <DialogContent>
             <LeaveForm editingLeave={editingLeave} />
           </DialogContent>
