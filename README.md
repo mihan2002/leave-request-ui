@@ -8,8 +8,6 @@ This document contains only the fontend setup.
 
 ## 🔧 Tech Stack
 
-### Frontend
-
 - React (Vite)
 - React Router
 - Axios
@@ -19,8 +17,6 @@ This document contains only the fontend setup.
 - JWT Authentication
 
 ## 📁 Project Structure
-
-### Frontend
 
 Located inside the `/leave-request-ui` folder:
 
