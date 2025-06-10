@@ -24,7 +24,6 @@ export default function Login() {
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    console.log("Form submitted");
     e.preventDefault();
 
     // Reset errors
@@ -42,30 +41,12 @@ export default function Login() {
     setLoading(true);
     try {
       const res = await login(username, password);
-      console.log("🚀 ~ handleSubmit ~ res:", res);
 
       if (res.token) {
         navigate("/leave-list");
       }
     } catch (err: any) {
-      console.log("🚀 ~ handleSubmit ~ err:", err)
-      // Extract the error message from backend response
-      const serverError =
-        err?.response?.data?.error || "Login failed. Please try again.";
-
-      // Map specific server messages to field errors
-      if (serverError.toLowerCase().includes("user not found")) {
-        setUsernameError(true);
-        setError("User not found. Please check your username.");
-      } else if (
-        serverError.toLowerCase().includes("invalid username or password")
-      ) {
-        setUsernameError(true);
-        setPasswordError(true);
-        setError("Invalid username or password.");
-      } else {
-        setError(serverError);
-      }
+      setError(err.response?.data?.error || "Login failed");
     } finally {
       setLoading(false);
     }
@@ -124,11 +105,7 @@ export default function Login() {
               disabled={loading}
               sx={{ mt: 2 }}
             >
-              {loading ? (
-                <CircularProgress size={24} color="inherit" />
-              ) : (
-                "Login"
-              )}
+              {loading ? <CircularProgress size={24} color="inherit" /> : "Login"}
             </Button>
           </Box>
 
