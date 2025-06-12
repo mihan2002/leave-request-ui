@@ -24,7 +24,14 @@ api.interceptors.request.use((config) => {
     }
     if (token && !isTokenValid(token)) {
       localStorage.removeItem("leaveRequestToken");
-      window.location.href = "/login";
+      Swal.fire({
+        icon: "error",
+        title: "Session Expired",
+        text: "Your session has expired. Please log in again.",
+        confirmButtonText: "OK",
+      }).then(() => {
+        window.location.href = "/login";
+      });
     }
     return config;
   });
