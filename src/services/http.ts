@@ -1,13 +1,12 @@
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-
+import Swal from "sweetalert2";
 const isTokenValid = (token: string): boolean => {
   try {
     const decoded: { exp: number } = jwtDecode(token);
     const currentTime = Date.now() / 1000;
     return decoded.exp > currentTime;
   } catch (err) {
-    
     return false;
   }
 };
@@ -21,10 +20,9 @@ api.interceptors.request.use((config) => {
     const token = localStorage.getItem("leaveRequestToken");
 
     if (token && isTokenValid(token)) {
-
       config.headers.Authorization = `Bearer ${token}`;
     }
-    if(token && !isTokenValid(token)){
+    if (token && !isTokenValid(token)) {
       localStorage.removeItem("leaveRequestToken");
       window.location.href = "/login";
     }
@@ -38,7 +36,16 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (res) => res,
   (err) => {
-  
+    
+    if (!err.response) {
+      Swal.fire({
+        icon: "error",
+        title: "Server Unreachable",
+        text: "The server is currently offline or not responding. Please try again later.",
+        confirmButtonText: "OK",
+      });
+    }
+
     return Promise.reject(err);
   }
 );
