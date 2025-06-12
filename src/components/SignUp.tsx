@@ -12,6 +12,7 @@ import {
   Paper,
 } from "@mui/material";
 import { signup } from "../services/authService";
+import Swal from "sweetalert2"; // import SweetAlert2
 
 export default function SignUp() {
   const [username, setUsername] = useState("");
@@ -48,12 +49,19 @@ export default function SignUp() {
     try {
       const res = await signup(username, password);
       if (res.status === 201) {
-        navigate("/login");
+        Swal.fire({
+          icon: "success",
+          title: "Registration Successful",
+          text: "Your account has been created. You can now log in.",
+          confirmButtonText: "Go to Login",
+        }).then(() => {
+          navigate("/login");
+        });
       }
     } catch (err: any) {
-      setError(err.response.data.error);
-    } finally {
-      setLoading(false);
+      setError(
+        err.response?.data?.error || "Registration failed. Please try again."
+      );
     }
   };
 

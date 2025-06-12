@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import {
   Button,
   Dialog,
-  DialogTitle,
   DialogContent,
   Table,
   TableBody,
@@ -20,6 +19,7 @@ import { leaveBus } from "../utils/rxBus";
 import LeaveForm from "./LeaveForm";
 import { logout } from "../services/authService";
 import { getLeaves, deleteLeave, getAllLeaves } from "../services/leaveService";
+import Swal from "sweetalert2";
 
 type Leave = {
   id: number;
@@ -27,6 +27,7 @@ type Leave = {
   startDate: string;
   endDate: string;
   reason: string;
+  user?: { username: string }; // Optional for role-based rendering
 };
 
 export default function LeaveList() {
@@ -38,20 +39,8 @@ export default function LeaveList() {
 
   const fetchLeaves = async () => {
     try {
-      let res;
-      if (role === "USER") {
-        res = await getLeaves();
-      } else {
-        res = await getAllLeaves();
-      }
-
-      if (Array.isArray(res)) {
-        console.log("🚀 ~ fetchLeaves ~ res:", res);
-        setLeaves(res);
-      } else {
-        console.warn("Unexpected response format:", res);
-        setLeaves([]);
-      }
+      const res = role === "USER" ? await getLeaves() : await getAllLeaves();
+      setLeaves(Array.isArray(res) ? res : []);
     } catch (err) {
       console.error("Failed to fetch leaves:", err);
       setLeaves([]);
@@ -60,7 +49,6 @@ export default function LeaveList() {
 
   useEffect(() => {
     fetchLeaves();
-
     const sub = leaveBus.subscribe((event) => {
       if (event === "refresh-leave-list") {
         fetchLeaves();
@@ -68,39 +56,59 @@ export default function LeaveList() {
         setEditingLeave(null);
       }
     });
-
     return () => sub.unsubscribe();
   }, []);
-
-  const handleUpdate = (leave: Leave) => {
-    setEditingLeave(leave);
-    setShowForm(true);
-  };
 
   const handleNew = () => {
     setEditingLeave(null);
     setShowForm(true);
   };
 
+  const handleUpdate = (leave: Leave) => {
+    setEditingLeave(leave);
+    setShowForm(true);
+  };
+
   const handleLogout = () => {
-    const confirmLogout = window.confirm("Are you sure you want to logout?");
-    if (confirmLogout) {
-      logout();
-      navigate("/login");
-    }
+    Swal.fire({
+      title: "Confirm Logout",
+      text: "You are about to log out of your account. Do you want to proceed?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, log me out",
+      cancelButtonText: "Cancel",
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        logout();
+        navigate("/login");
+        Swal.fire("Logged out", "You have been successfully logged out.", "success");
+      }
+    });
   };
 
   const handleDelete = async (id: number) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this leave request?"
-    );
-    if (!confirmDelete) return;
+    const result = await Swal.fire({
+      title: "Delete Leave Request?",
+      text: "This action cannot be undone. Do you really want to delete this leave request?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it",
+      cancelButtonText: "Cancel",
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+    });
+
+    if (!result.isConfirmed) return;
 
     try {
       await deleteLeave(id);
       fetchLeaves();
+      Swal.fire("Deleted!", "The leave request has been deleted.", "success");
     } catch (err) {
       console.error("Failed to delete leave request:", err);
+      Swal.fire("Error", "There was a problem deleting the leave request.", "error");
     }
   };
 
@@ -116,6 +124,7 @@ export default function LeaveList() {
           borderRadius: 2,
         }}
       >
+        {/* Header Actions */}
         <Stack
           direction="row"
           justifyContent="space-between"
@@ -135,6 +144,7 @@ export default function LeaveList() {
           </Stack>
         </Stack>
 
+        {/* Leave Table or Empty Message */}
         {leaves.length === 0 ? (
           <Typography align="center" color="text.secondary">
             No leave requests found.
@@ -144,7 +154,7 @@ export default function LeaveList() {
             <Table>
               <TableHead>
                 <TableRow>
-                  {role === "ADMIN" && <TableCell>UserName</TableCell>}
+                  {role === "ADMIN" && <TableCell>User</TableCell>}
                   <TableCell>Type</TableCell>
                   <TableCell>Start Date</TableCell>
                   <TableCell>End Date</TableCell>
@@ -156,18 +166,14 @@ export default function LeaveList() {
                 {leaves.map((leave) => (
                   <TableRow key={leave.id}>
                     {role === "ADMIN" && (
-                      <TableCell>{leave.user.username}</TableCell>
+                      <TableCell>{leave.user?.username || "N/A"}</TableCell>
                     )}
                     <TableCell>{leave.type}</TableCell>
                     <TableCell>{leave.startDate}</TableCell>
                     <TableCell>{leave.endDate}</TableCell>
                     <TableCell>{leave.reason}</TableCell>
                     <TableCell align="center">
-                      <Stack
-                        direction="row"
-                        spacing={1}
-                        justifyContent="center"
-                      >
+                      <Stack direction="row" spacing={1} justifyContent="center">
                         <Button
                           variant="contained"
                           color="warning"
@@ -195,6 +201,7 @@ export default function LeaveList() {
           </TableContainer>
         )}
 
+        {/* Dialog for Form */}
         <Dialog
           open={showForm}
           onClose={() => setShowForm(false)}
