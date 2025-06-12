@@ -48,6 +48,7 @@ export default function SignUp() {
     setLoading(true);
     try {
       const res = await signup(username, password);
+
       if (res.status === 201) {
         Swal.fire({
           icon: "success",
@@ -59,9 +60,8 @@ export default function SignUp() {
         });
       }
     } catch (err: any) {
-      setError(
-        err.response?.data?.error || "Registration failed. Please try again."
-      );
+      setLoading(false);
+      setError(err.response?.data?.error);
     }
   };
 

@@ -36,12 +36,19 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (res) => res,
   (err) => {
-    
     if (!err.response) {
       Swal.fire({
         icon: "error",
         title: "Server Unreachable",
         text: "The server is currently offline or not responding. Please try again later.",
+        confirmButtonText: "OK",
+      });
+    }
+    if (err.response.status === 500) {
+      Swal.fire({
+        icon: "error",
+        title: "USER ROLE NOT FOUND",
+        text: "The specific role isn't found in the database. Please try again later.",
         confirmButtonText: "OK",
       });
     }
