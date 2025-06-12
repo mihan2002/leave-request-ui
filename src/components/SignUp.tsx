@@ -47,11 +47,11 @@ export default function SignUp() {
     setLoading(true);
     try {
       const res = await signup(username, password);
-      if (res.token) {
-        navigate("/leave-list");
+      if (res.status === 201) {
+        navigate("/login");
       }
     } catch (err: any) {
-      setError(err.response?.data?.error || "Sign up failed");
+      setError(err.response.data.error);
     } finally {
       setLoading(false);
     }

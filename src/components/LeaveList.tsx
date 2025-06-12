@@ -19,7 +19,7 @@ import {
 import { leaveBus } from "../utils/rxBus";
 import LeaveForm from "./LeaveForm";
 import { logout } from "../services/authService";
-import { getLeaves, deleteLeave } from "../services/leaveService";
+import { getLeaves, deleteLeave, getAllLeaves } from "../services/leaveService";
 
 type Leave = {
   id: number;
@@ -34,11 +34,19 @@ export default function LeaveList() {
   const [showForm, setShowForm] = useState(false);
   const [editingLeave, setEditingLeave] = useState<Leave | null>(null);
   const navigate = useNavigate();
+  const role = localStorage.getItem("role");
 
   const fetchLeaves = async () => {
     try {
-      const res = await getLeaves();
+      let res;
+      if (role === "USER") {
+        res = await getLeaves();
+      } else {
+        res = await getAllLeaves();
+      }
+
       if (Array.isArray(res)) {
+        console.log("🚀 ~ fetchLeaves ~ res:", res);
         setLeaves(res);
       } else {
         console.warn("Unexpected response format:", res);
@@ -136,6 +144,7 @@ export default function LeaveList() {
             <Table>
               <TableHead>
                 <TableRow>
+                  {role === "ADMIN" && <TableCell>UserName</TableCell>}
                   <TableCell>Type</TableCell>
                   <TableCell>Start Date</TableCell>
                   <TableCell>End Date</TableCell>
@@ -146,6 +155,9 @@ export default function LeaveList() {
               <TableBody>
                 {leaves.map((leave) => (
                   <TableRow key={leave.id}>
+                    {role === "ADMIN" && (
+                      <TableCell>{leave.user.username}</TableCell>
+                    )}
                     <TableCell>{leave.type}</TableCell>
                     <TableCell>{leave.startDate}</TableCell>
                     <TableCell>{leave.endDate}</TableCell>
@@ -164,14 +176,16 @@ export default function LeaveList() {
                         >
                           Update
                         </Button>
-                        <Button
-                          variant="contained"
-                          color="error"
-                          size="small"
-                          onClick={() => handleDelete(leave.id)}
-                        >
-                          Delete
-                        </Button>
+                        {role === "ADMIN" && (
+                          <Button
+                            variant="contained"
+                            color="error"
+                            size="small"
+                            onClick={() => handleDelete(leave.id)}
+                          >
+                            Delete
+                          </Button>
+                        )}
                       </Stack>
                     </TableCell>
                   </TableRow>
