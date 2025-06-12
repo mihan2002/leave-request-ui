@@ -41,14 +41,12 @@ export default function Login() {
     setLoading(true);
     try {
       const res = await login(username, password);
-     
 
       if (res.token) {
         navigate("/leave-list");
       }
     } catch (err: any) {
-    
-      setError(err.response.data.error);
+      setError(err.response?.data?.error || "Login failed");
     } finally {
       setLoading(false);
     }

@@ -1,11 +1,6 @@
 
 import api from './http';
 
-export const getAllLeaves = async () => {
-  const res = await api.get('api/leave-requests/all');
-  return res.data;
-};
-
 export const getLeaves = async () => {
   const res = await api.get('api/leave-requests');
   return res.data;
